@@ -1,0 +1,31 @@
+substitutions:
+  _REGION: asia-southeast2 # TODO: region
+  _REGISTRY: docker # TODO: registry
+  _SERVICE: service # TODO: service name
+  _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REGISTRY}/${_SERVICE}
+
+steps:
+  - name: gcr.io/kaniko-project/executor:latest
+    args:
+      - --destination=${_IMAGE}
+      - --cache=true
+      - --cache-ttl=24h
+
+  - name: gcr.io/cloud-builders/gcloud
+    script: |
+      #!/usr/bin/env bash
+
+      gcloud artifacts docker images describe \
+          --project=${PROJECT_ID} \
+          --format "value(image_summary.digest)" \
+          ${_IMAGE}:latest | tee /tmp/digest.txt
+
+      gcloud run deploy ${_SERVICE} \
+          --allow-unauthenticated \
+          --project=${PROJECT_ID} \
+          --region=${_REGION} \
+          --image="${_IMAGE}@$(cat /tmp/digest.txt)"
+
+options:
+  dynamicSubstitutions: true
+  automapSubstitutions: true
