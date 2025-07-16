@@ -32,7 +32,7 @@
               pkgs.pre-commit
               pkgs.uv
 
-              (pkgs.python312.withPackages (
+              (pkgs.python313.withPackages (
                 p: with p; [
                   venvShellHook
                   pip

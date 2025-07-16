@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.13-slim AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -7,8 +7,6 @@ WORKDIR /app
 ENV UV_COMPILE_BYTECODE=1
 
 ENV UV_LINK_MODE=copy
-
-RUN apt-get update && apt-get install --assume-yes git
 
 COPY uv.lock .
 
@@ -22,7 +20,7 @@ RUN uv sync --frozen --no-editable
 
 
 
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
