@@ -1,0 +1,34 @@
+substitutions:
+  _SERVICE: service # TODO: service name
+  _REGION: asia-southeast2 # TODO: region
+  _REGISTRY: docker # TODO: registry
+  _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REGISTRY}/${_SERVICE}
+  _CHART: oci://${_REGION}-docker.pkg.dev/${PROJECT_ID}/helm/cloud-run
+
+steps:
+  - name: gcr.io/kaniko-project/executor
+    args:
+      - --context=.
+      - --dockerfile=ci/Dockerfile
+      - --destination=${_IMAGE}:latest
+      - --destination=${_IMAGE}:${COMMIT_SHA}
+      - --cache=true
+      - --cache-ttl=24h
+
+  - name: docker.io/alpine/helm
+    script: |
+      helm template ${_CHART} \
+        --values=ci/cloudrun.yaml \
+        --set=region="${LOCATION}" \
+        --set=project.id="${PROJECT_ID}" \
+        --set=project.number="${PROJECT_NUMBER}" \
+        --set=image="${_IMAGE}:${COMMIT_SHA}" \
+        > /workspace/service.yaml
+
+  - name: gcr.io/cloud-builders/gcloud
+    script: |
+      gcloud run services replace /workspace/service.yaml
+
+options:
+  dynamicSubstitutions: true
+  automapSubstitutions: true

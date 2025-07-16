@@ -29,6 +29,8 @@ RUN useradd --uid 1000 --user-group --system app \
 
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
 
+COPY --from=builder --chown=app:app /app/db /app/db
+
 USER app
 
 CMD ["/app/.venv/bin/app"]
