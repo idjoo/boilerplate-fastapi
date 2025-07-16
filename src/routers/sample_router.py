@@ -61,7 +61,29 @@ async def read_all(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
 ) -> Page[SamplePublic]:
-    return await sample_service.read_all()
+    try:
+        data = await sample_service.read_all()
+    except Exception as error:
+        logger.error(error, exc_info=True)
+        if not hasattr(error, "status_code"):
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=Response(
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    message=str(error),
+                    data=None,
+                ).model_dump(),
+            )
+        raise HTTPException(
+            status_code=error.status_code,
+            detail=Response(
+                status=error.status_code,
+                message=f"{error.code}: {error.message}",
+                data=None,
+            ).model_dump(),
+        )
+
+    return data
 
 
 @router.get("/{id}")
