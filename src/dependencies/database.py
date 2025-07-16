@@ -36,9 +36,14 @@ async def create_engine() -> AsyncEngine:
 
 
 async def init():
-    engine = await create_engine()
-    async with engine.begin() as conn:
-        await conn.run_sync(SQLModel.metadata.create_all)
+    import asyncio
+
+    from alembic import command
+    from alembic.config import Config as AlembicConfig
+
+    await asyncio.to_thread(
+        command.upgrade, config=AlembicConfig("db/alembic.ini"), revision="head"
+    )
 
 
 async def get_session(
