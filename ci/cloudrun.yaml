@@ -1,0 +1,49 @@
+name: service
+
+image: image
+
+port: &port 8080
+
+serviceAccount: cloud-run@project-id.iam.gserviceaccount.com
+
+env:
+  ENVIRONMENT: development
+
+autoscaling:
+  min: 0
+  max: 100
+
+network:
+  vpc: vpc-name
+  subnet: subnet-name
+  project: network-project-name
+  region: asia-southeast2
+  egress: all-traffic
+  startupCpuBoost: true
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+
+# TODO need to be created in secret manager
+config:
+  name: config-name
+  version: latest
+  type: yaml
+
+livenessProbe:
+  timeoutSeconds: 10
+  periodSeconds: 10
+  failureThreshold: 3
+  httpGet:
+    path: /health
+    port: *port
+
+startupProbe:
+  timeoutSeconds: 10
+  periodSeconds: 10
+  failureThreshold: 3
+  httpGet:
+    path: /health
+    port: *port
