@@ -14,12 +14,11 @@ from src.dependencies.config import Config, get_config
 from src.dependencies.logger import Logger, get_logger
 
 config: Config = get_config()
-logger: Logger = get_logger(config)
+logger: Logger = get_logger()
 
 
 async def create_engine() -> AsyncEngine:
     url = ""
-
     if config.database.url:
         url = config.database.url
     else:
@@ -46,7 +45,7 @@ async def init():
     )
 
 
-async def get_session(
+async def aget_session(
     engine: Annotated[AsyncEngine, Depends(create_engine)],
 ) -> AsyncSession:
     logger.info("creating database session")
@@ -62,4 +61,4 @@ async def get_session(
     logger.info("closing database session")
 
 
-Database = Annotated[AsyncSession, Depends(get_session)]
+Database = Annotated[AsyncSession, Depends(aget_session)]

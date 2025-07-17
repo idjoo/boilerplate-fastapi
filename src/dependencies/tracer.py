@@ -17,12 +17,12 @@ from opentelemetry.trace import SpanKind
 from opentelemetry.trace.span import Span
 from opentelemetry.trace.status import StatusCode
 
-from src.dependencies.config import Config, get_config
-
-config: Config = get_config()
+from src.dependencies.config import Config, aget_config, get_config
 
 
 async def init():
+    config: Config = await aget_config()
+
     tracer_provider = TracerProvider(
         resource=Resource.create({"service.name": config.service}),
     )
@@ -37,7 +37,9 @@ async def init():
 
 @asynccontextmanager
 async def track(name: str) -> Iterator[Span]:
+    config: Config = await aget_config()
     tracer = trace.get_tracer(config.service)
+
     with tracer.start_as_current_span(
         name,
         kind=SpanKind.INTERNAL,
@@ -52,7 +54,9 @@ async def track(name: str) -> Iterator[Span]:
 
 @contextmanager
 def create_span(func: Callable):
+    config: Config = get_config()
     tracer = trace.get_tracer(config.service)
+
     with tracer.start_as_current_span(
         func.__qualname__,
         kind=SpanKind.INTERNAL,
