@@ -26,9 +26,7 @@ class SampleService:
         self,
         sample: SampleCreate,
     ) -> Sample:
-        sample = await self.sample_repository.create(sample)
-
-        return sample
+        return await self.sample_repository.create(sample)
 
     async def read_all(
         self,
@@ -52,4 +50,4 @@ class SampleService:
         self,
         id: UUID,
     ) -> None:
-        return await self.sample_repository.delete(Sample(id=id))
+        return await self.sample_repository.delete(id=id)

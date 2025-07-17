@@ -78,7 +78,7 @@ class SampleRepository:
 
     async def delete(
         self,
-        sample: Sample,
+        id: UUID,
     ) -> None:
-        await self.db.exec(delete(Sample).where(Sample.id == sample.id))
+        await self.db.exec(delete(Sample).where(Sample.id == id))
         await self.db.commit()
