@@ -5,7 +5,7 @@ from sqlmodel import Field, SQLModel
 
 
 class SampleBase(SQLModel):
-    name: str = Field(default="default sample")
+    name: str = Field()
 
 
 class Sample(SampleBase, table=True):
@@ -20,7 +20,7 @@ class Sample(SampleBase, table=True):
 
 
 class SampleCreate(SampleBase):
-    id: UUID
+    pass
 
 
 class SamplePublic(SampleBase):
