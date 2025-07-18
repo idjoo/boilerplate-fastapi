@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 
 from src.dependencies import Logger, tracer
+from src.exceptions import SampleError
 from src.models import (
     SampleCreate,
     SamplePublic,
@@ -26,28 +27,7 @@ async def create(
     sample_service: Annotated[SampleService, Depends()],
     sample: SampleCreate,
 ) -> Response[SamplePublic]:
-    try:
-        data = await sample_service.create(sample)
-    except Exception as error:
-        logger.error(error, exc_info=True)
-        if not hasattr(error, "status_code"):
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=Response(
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    message=str(error),
-                    data=None,
-                ).model_dump(),
-            )
-        raise HTTPException(
-            status_code=error.status_code,
-            detail=Response(
-                status=error.status_code,
-                message=f"{error.code}: {error.message}",
-                data=None,
-            ).model_dump(),
-        )
-
+    data = await sample_service.create(sample)
     return Response(
         status=status.HTTP_200_OK,
         message="Sample created successfully",
@@ -61,28 +41,7 @@ async def read_all(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
 ) -> Page[SamplePublic]:
-    try:
-        data = await sample_service.read_all()
-    except Exception as error:
-        logger.error(error, exc_info=True)
-        if not hasattr(error, "status_code"):
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=Response(
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    message=str(error),
-                    data=None,
-                ).model_dump(),
-            )
-        raise HTTPException(
-            status_code=error.status_code,
-            detail=Response(
-                status=error.status_code,
-                message=f"{error.code}: {error.message}",
-                data=None,
-            ).model_dump(),
-        )
-
+    data = await sample_service.read_all()
     return data
 
 
@@ -93,28 +52,7 @@ async def read(
     sample_service: Annotated[SampleService, Depends()],
     id: UUID,
 ) -> Response[SamplePublic]:
-    try:
-        data = await sample_service.read(id)
-    except Exception as error:
-        logger.error(error, exc_info=True)
-        if not hasattr(error, "status_code"):
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=Response(
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    message=str(error),
-                    data=None,
-                ).model_dump(),
-            )
-        raise HTTPException(
-            status_code=error.status_code,
-            detail=Response(
-                status=error.status_code,
-                message=f"{error.code}: {error.message}",
-                data=None,
-            ).model_dump(),
-        )
-
+    data = await sample_service.read(id)
     return Response(
         status=status.HTTP_200_OK,
         message="Success",
@@ -130,28 +68,7 @@ async def update(
     id: UUID,
     sample: SampleUpdate,
 ) -> Response[SamplePublic]:
-    try:
-        data = await sample_service.update(id, sample)
-    except Exception as error:
-        logger.error(error, exc_info=True)
-        if not hasattr(error, "status_code"):
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=Response(
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    message=str(error),
-                    data=None,
-                ).model_dump(),
-            )
-        raise HTTPException(
-            status_code=error.status_code,
-            detail=Response(
-                status=error.status_code,
-                message=f"{error.code}: {error.message}",
-                data=None,
-            ).model_dump(),
-        )
-
+    data = await sample_service.update(id, sample)
     return Response(
         status=status.HTTP_200_OK,
         message="Successfully updated",
@@ -169,28 +86,7 @@ async def delete(
     sample_service: Annotated[SampleService, Depends()],
     id: UUID,
 ) -> Response:
-    try:
-        await sample_service.delete(id)
-    except Exception as error:
-        logger.error(error, exc_info=True)
-        if not hasattr(error, "status_code"):
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=Response(
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    message=str(error),
-                    data=None,
-                ).model_dump(),
-            )
-        raise HTTPException(
-            status_code=error.status_code,
-            detail=Response(
-                status=error.status_code,
-                message=f"{error.code}: {error.message}",
-                data=None,
-            ).model_dump(),
-        )
-
+    await sample_service.delete(id)
     return Response(
         status=status.HTTP_200_OK,
         message="Successfully deleted",

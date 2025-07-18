@@ -6,7 +6,11 @@ from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlmodel import delete, select, update
 
 from src.dependencies import Database
-from src.exceptions import SampleAlreadyExistsError, SampleNotFoundError
+from src.exceptions import (
+    SampleAlreadyExistsError,
+    SampleError,
+    SampleNotFoundError,
+)
 from src.models import (
     Sample,
     SampleCreate,
@@ -30,18 +34,22 @@ class SampleRepository:
             self.db.add(data)
             await self.db.commit()
             await self.db.refresh(data)
-        except IntegrityError:
-            raise SampleAlreadyExistsError()
-
-        return data
+            return data
+        except IntegrityError as error:
+            raise SampleAlreadyExistsError() from error
+        except Exception as error:
+            raise SampleError("Database Internal Error") from error
 
     async def read_all(
         self,
     ) -> Page[Sample]:
-        return await paginate(
-            self.db,
-            select(Sample),
-        )
+        try:
+            return await paginate(
+                self.db,
+                select(Sample),
+            )
+        except Exception as error:
+            raise SampleError("Database Internal Error") from error
 
     async def read(
         self,
@@ -54,31 +62,38 @@ class SampleRepository:
                 )
             ).one()
             await self.db.refresh(result)
-        except NoResultFound:
-            raise SampleAlreadyExistsError()
-
-        return result
+            return result
+        except NoResultFound as error:
+            raise SampleNotFoundError() from error
+        except Exception as error:
+            raise SampleError("Database Internal Error") from error
 
     async def update(
         self,
         id: UUID,
         sample: SampleUpdate,
     ) -> Sample:
-        result = (
-            await self.db.scalars(
-                update(Sample)
-                .where(Sample.id == id)
-                .values(sample.model_dump(exclude_none=True))
-                .returning(Sample),
-            )
-        ).one()
-        await self.db.commit()
-        await self.db.refresh(result)
-        return result
+        try:
+            result = (
+                await self.db.scalars(
+                    update(Sample)
+                    .where(Sample.id == id)
+                    .values(sample.model_dump(exclude_none=True))
+                    .returning(Sample),
+                )
+            ).one()
+            await self.db.commit()
+            await self.db.refresh(result)
+            return result
+        except Exception as error:
+            raise SampleError("Database Internal Error") from error
 
     async def delete(
         self,
         id: UUID,
     ) -> None:
-        await self.db.exec(delete(Sample).where(Sample.id == id))
-        await self.db.commit()
+        try:
+            await self.db.exec(delete(Sample).where(Sample.id == id))
+            await self.db.commit()
+        except Exception as error:
+            raise SampleError("Database Internal Error") from error

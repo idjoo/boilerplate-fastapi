@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, status
+from fastapi import FastAPI, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -10,6 +11,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.dependencies import Environment
 from src.dependencies.config import Config, get_config
+from src.dependencies.logger import Logger, get_logger
+from src.exceptions import SampleError
 from src.routers import HealthRouter, SampleRouter
 from src.schemas import Response
 
@@ -18,13 +21,14 @@ from src.schemas import Response
 async def lifespan(app: FastAPI):
     from src.dependencies import database, logger, tracer
 
+    await database.init()
     await logger.init()
     await tracer.init()
-    await database.init()
     yield
 
 
 config: Config = get_config()
+logger: Logger = get_logger()
 
 
 title = "Service Name - Swagger UI"  # TODO: service name
@@ -65,9 +69,38 @@ app.include_router(SampleRouter)
 # ===============
 # Handlers
 # ===============
-@app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(request, exc):
-    return JSONResponse(exc.detail, status_code=exc.status_code)
+@app.exception_handler(SampleError)
+async def http_exception_handler(request, exception):
+    logger.error(exception.message, exc_info=True)
+    return JSONResponse(
+        status_code=exception.status_code,
+        content={
+            "status_code": exception.status_code,
+            "message": exception.message,
+            "data": None,
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exception):
+    data = {}
+    for error in exception.errors():
+        loc, msg = error["loc"], error["msg"]
+        filtered_loc = loc[1:] if loc[0] in ("body", "query", "path") else loc
+        field_string = ".".join(filtered_loc)
+        if field_string not in data:
+            data[field_string] = []
+        data[field_string].append(msg)
+
+    return JSONResponse(
+        status_code=400,
+        content={
+            "status_code": 400,
+            "message": f"Validation Error",
+            "data": data,
+        },
+    )
 
 
 # ===============
