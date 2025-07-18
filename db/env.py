@@ -1,5 +1,4 @@
 import asyncio
-from logging.config import fileConfig
 from urllib.parse import quote
 
 from alembic import context
@@ -13,9 +12,6 @@ from src.models import Sample
 
 config = context.config
 app_config: Config = get_config()
-
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
 
 target_metadata = SQLModel.metadata
 
