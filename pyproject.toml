@@ -42,7 +42,7 @@ package = true
 line-length = 80
 
 [tool.ruff.lint]
-select = ["RUF", "I", "UP", "FAST", "ASYNC"]
+extend-select = ["RUF", "F", "I", "UP", "FAST", "ASYNC"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
