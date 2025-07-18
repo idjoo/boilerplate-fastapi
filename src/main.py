@@ -1,13 +1,12 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi_pagination import add_pagination
-from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from src.dependencies import Environment
 from src.dependencies.config import Config, get_config
@@ -97,7 +96,7 @@ async def validation_exception_handler(request, exception):
         status_code=400,
         content={
             "status_code": 400,
-            "message": f"Validation Error",
+            "message": "Validation Error",
             "data": data,
         },
     )

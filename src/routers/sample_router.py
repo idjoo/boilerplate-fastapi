@@ -1,11 +1,10 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from fastapi_pagination import Page
 
 from src.dependencies import Logger, tracer
-from src.exceptions import SampleError
 from src.models import (
     SampleCreate,
     SamplePublic,
@@ -76,10 +75,7 @@ async def update(
     )
 
 
-@router.delete(
-    "/{id}",
-    status_code=status.HTTP_200_OK,
-)
+@router.delete("/{id}")
 @tracer.observe
 async def delete(
     logger: Logger,

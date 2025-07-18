@@ -1,9 +1,8 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 from fastapi_pagination import Page
-from sqlalchemy.exc import IntegrityError
 
 from src.models import (
     Sample,

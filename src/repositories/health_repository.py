@@ -15,5 +15,5 @@ class HealthRepository:
         try:
             await self.db.exec(select(1))
             return True
-        except:
+        except Exception:
             return False

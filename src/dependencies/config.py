@@ -1,13 +1,9 @@
-import json
 from enum import StrEnum, auto
 from os import environ
-from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated
 
-import aiofiles
 from fastapi import Depends
-from pydantic import BaseModel, Field
-from pydantic.fields import FieldInfo
+from pydantic import BaseModel
 from pydantic_settings import (
     BaseSettings,
     JsonConfigSettingsSource,
