@@ -7,8 +7,8 @@ from sqlmodel import delete, select, update
 
 from src.dependencies import Database
 from src.exceptions import (
+    BaseError,
     SampleAlreadyExistsError,
-    SampleError,
     SampleNotFoundError,
 )
 from src.models import (
@@ -38,7 +38,7 @@ class SampleRepository:
         except IntegrityError as error:
             raise SampleAlreadyExistsError() from error
         except Exception as error:
-            raise SampleError("Database Internal Error") from error
+            raise BaseError("Database Internal Error") from error
 
     async def read_all(
         self,
@@ -49,7 +49,7 @@ class SampleRepository:
                 select(Sample),
             )
         except Exception as error:
-            raise SampleError("Database Internal Error") from error
+            raise BaseError("Database Internal Error") from error
 
     async def read(
         self,
@@ -66,7 +66,7 @@ class SampleRepository:
         except NoResultFound as error:
             raise SampleNotFoundError() from error
         except Exception as error:
-            raise SampleError("Database Internal Error") from error
+            raise BaseError("Database Internal Error") from error
 
     async def update(
         self,
@@ -86,7 +86,7 @@ class SampleRepository:
             await self.db.refresh(result)
             return result
         except Exception as error:
-            raise SampleError("Database Internal Error") from error
+            raise BaseError("Database Internal Error") from error
 
     async def delete(
         self,
@@ -96,4 +96,4 @@ class SampleRepository:
             await self.db.exec(delete(Sample).where(Sample.id == id))
             await self.db.commit()
         except Exception as error:
-            raise SampleError("Database Internal Error") from error
+            raise BaseError("Database Internal Error") from error

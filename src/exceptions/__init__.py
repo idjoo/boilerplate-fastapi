@@ -1,11 +1,14 @@
+from .base_exception import BaseError
+from .health_exception import CacheHealthError, DatabaseHealthError
 from .sample_exception import (
     SampleAlreadyExistsError,
-    SampleError,
     SampleNotFoundError,
 )
 
 __all__ = [
+    "BaseError",
+    "CacheHealthError",
+    "DatabaseHealthError",
     "SampleAlreadyExistsError",
-    "SampleError",
     "SampleNotFoundError",
 ]

@@ -11,7 +11,7 @@ from fastapi_pagination import add_pagination
 from src.dependencies import Environment
 from src.dependencies.config import Config, get_config
 from src.dependencies.logger import Logger, get_logger
-from src.exceptions import SampleError
+from src.exceptions import BaseError
 from src.routers import HealthRouter, SampleRouter
 from src.schemas import Response
 
@@ -68,7 +68,7 @@ app.include_router(SampleRouter)
 # ===============
 # Handlers
 # ===============
-@app.exception_handler(SampleError)
+@app.exception_handler(BaseError)
 async def http_exception_handler(request, exception):
     logger.error(exception.message, exc_info=True)
     return JSONResponse(
