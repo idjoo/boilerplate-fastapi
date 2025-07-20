@@ -17,10 +17,8 @@ logger: Logger = get_logger()
 
 
 async def create_engine() -> AsyncEngine:
-    url = ""
-    if config.database.url:
-        url = config.database.url
-    else:
+    url = config.database.url
+    if not url:
         url = (
             f"{config.database.kind}+{config.database.adapter}://"
             f"{config.database.username}:{quote(config.database.password)}@"
