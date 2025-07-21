@@ -1,12 +1,16 @@
 from sqlalchemy import select
 
 from src.dependencies import Database
+from src.exceptions import DatabaseHealthError
 
 
 class HealthRepository:
     db: Database
 
-    def __init__(self, db: Database) -> None:
+    def __init__(
+        self,
+        db: Database,
+    ) -> None:
         self.db = db
 
     async def check(
@@ -14,6 +18,7 @@ class HealthRepository:
     ) -> bool:
         try:
             await self.db.exec(select(1))
-            return True
         except Exception:
-            return False
+            raise DatabaseHealthError()
+
+        return True
