@@ -11,23 +11,18 @@ steps:
       - --context=.
       - --dockerfile=ci/Dockerfile
       - --destination=${_IMAGE}:latest
-      - --destination=${_IMAGE}:${COMMIT_SHA}
+      - --destination=${_IMAGE}:${BUILD_ID}
       - --cache=true
       - --cache-ttl=24h
 
-  - name: docker.io/alpine/helm
-    script: |
-      helm template ${_CHART} \
-        --values=ci/cloudrun.yaml \
-        --set=region="${LOCATION}" \
-        --set=project.id="${PROJECT_ID}" \
-        --set=project.number="${PROJECT_NUMBER}" \
-        --set=image="${_IMAGE}:${COMMIT_SHA}" \
-        > /workspace/service.yaml
-
   - name: gcr.io/cloud-builders/gcloud
-    script: |
-      gcloud run services replace /workspace/service.yaml
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --project=${PROJECT_ID}
+      - --region=${_REGION}
+      - --image=${_IMAGE}:${BUILD_ID}
 
 options:
   dynamicSubstitutions: true
