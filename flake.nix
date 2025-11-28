@@ -47,6 +47,7 @@
                   pkgs.libz
                 ]
               }
+              source .venv/bin/activate
             '';
           };
         }
