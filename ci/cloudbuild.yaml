@@ -3,7 +3,6 @@ substitutions:
   _REGION: asia-southeast2 # TODO: region
   _REGISTRY: docker # TODO: registry
   _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REGISTRY}/${_SERVICE}
-  _CHART: oci://${_REGION}-docker.pkg.dev/${PROJECT_ID}/helm/cloud-run
 
 steps:
   - name: gcr.io/kaniko-project/executor
