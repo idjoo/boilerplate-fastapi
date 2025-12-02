@@ -45,8 +45,8 @@ class Settings(BaseSettings):
 
 
 class Environment(StrEnum):
-    DEVELOPMENT = auto()
-    PRODUCTION = auto()
+    DEV = auto()
+    PRD = auto()
 
 
 class LoggingLevel(StrEnum):
@@ -75,7 +75,7 @@ class BaseConfig(Settings):
     service: str
     host: str = "0.0.0.0"
     port: int = 8080
-    environment: Environment = Environment.DEVELOPMENT
+    environment: Environment = Environment.DEV
     logging: Logging = Logging()
     database: Database = Database()
 

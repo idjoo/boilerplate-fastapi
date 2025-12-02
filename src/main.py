@@ -107,7 +107,7 @@ async def validation_exception_handler(request, exception):
 # ===============
 @app.get("/docs", include_in_schema=False)
 async def swagger_ui_html():
-    if config.environment == Environment.PRODUCTION:
+    if config.environment == Environment.PRD:
         return Response(
             status=status.HTTP_404_NOT_FOUND, message="404 Not Found"
         )
@@ -121,7 +121,7 @@ async def swagger_ui_html():
 
 @app.get("/", include_in_schema=False)
 async def home():
-    if config.environment == Environment.PRODUCTION:
+    if config.environment == Environment.PRD:
         return Response(
             status=status.HTTP_404_NOT_FOUND, message="404 Not Found"
         )
@@ -138,5 +138,5 @@ def server():
         host=config.host,
         port=config.port,
         log_level=config.logging.level.lower(),
-        reload=True if config.environment == Environment.DEVELOPMENT else False,
+        reload=True if config.environment == Environment.DEV else False,
     )
