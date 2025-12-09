@@ -22,6 +22,9 @@ RUN uv sync --frozen --no-editable
 
 FROM python:3.13-slim
 
+ENV TZ="Asia/Jakarta"
+ENV PYTHONWARNINGS="ignore::UserWarning"
+
 WORKDIR /app
 
 RUN useradd --uid 1000 --user-group --system app \
