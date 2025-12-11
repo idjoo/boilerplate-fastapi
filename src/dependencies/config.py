@@ -45,6 +45,7 @@ class Settings(BaseSettings):
 
 
 class Environment(StrEnum):
+    LOCAL = auto()
     DEV = auto()
     PRD = auto()
 
@@ -75,7 +76,7 @@ class BaseConfig(Settings):
     service: str
     host: str = "0.0.0.0"
     port: int = 8080
-    environment: Environment = Environment.DEV
+    environment: Environment = Environment.LOCAL
     logging: Logging = Logging()
     database: Database = Database()
 

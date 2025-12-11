@@ -138,5 +138,7 @@ def server():
         host=config.host,
         port=config.port,
         log_level=config.logging.level.lower(),
-        reload=True if config.environment == Environment.DEV else False,
+        reload=True
+        if config.environment in [Environment.LOCAL, Environment.DEV]
+        else False,
     )
