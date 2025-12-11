@@ -1,8 +1,8 @@
 import inspect
 from collections.abc import Callable, Iterator
 from contextlib import asynccontextmanager, contextmanager
-from functools import wraps
 
+import wrapt
 from opentelemetry import trace
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.propagate import set_global_textmap
@@ -72,21 +72,18 @@ def create_span(func: Callable):
         span.set_status(StatusCode.OK)
 
 
-def observe(func):
-    @wraps(func)
-    def _wrapper(*args, **kwargs):
-        with create_span(func):
-            return func(*args, **kwargs)
+@wrapt.decorator
+def observe(wrapped, instance, args, kwargs):
+    if inspect.iscoroutinefunction(wrapped):
 
-    @wraps(func)
-    async def _awrapper(*args, **kwargs):
-        with create_span(func):
-            return await func(*args, **kwargs)
+        async def _awrapper():
+            with create_span(wrapped):
+                return await wrapped(*args, **kwargs)
 
-    if inspect.iscoroutinefunction(func):
-        return _awrapper
+        return _awrapper()
     else:
-        return _wrapper
+        with create_span(wrapped):
+            return wrapped(*args, **kwargs)
 
 
 __all__ = ["observe", "track"]

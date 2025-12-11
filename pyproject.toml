@@ -16,6 +16,7 @@ dependencies = [
     "opentelemetry-api>=1.30.0",
     "fastapi-pagination>=0.12.34",
     "psycopg[binary]>=3.2.9",
+    "wrapt>=2.0.1",
 ]
 
 [project.scripts]
