@@ -5,7 +5,7 @@ from fastapi_pagination.ext.async_sqlmodel import paginate
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlmodel import delete, select, update
 
-from src.dependencies import Database
+from src.dependencies import Database, tracer
 from src.exceptions import (
     BaseError,
     SampleAlreadyExistsError,
@@ -24,6 +24,7 @@ class SampleRepository:
     def __init__(self, db: Database) -> None:
         self.db = db
 
+    @tracer.observe()
     async def create(
         self,
         sample: SampleCreate,
@@ -40,6 +41,7 @@ class SampleRepository:
         except Exception as error:
             raise BaseError("Database Internal Error") from error
 
+    @tracer.observe()
     async def read_all(
         self,
     ) -> Page[Sample]:
@@ -51,6 +53,7 @@ class SampleRepository:
         except Exception as error:
             raise BaseError("Database Internal Error") from error
 
+    @tracer.observe()
     async def read(
         self,
         id: UUID,
@@ -68,6 +71,7 @@ class SampleRepository:
         except Exception as error:
             raise BaseError("Database Internal Error") from error
 
+    @tracer.observe()
     async def update(
         self,
         id: UUID,
@@ -88,6 +92,7 @@ class SampleRepository:
         except Exception as error:
             raise BaseError("Database Internal Error") from error
 
+    @tracer.observe()
     async def delete(
         self,
         id: UUID,

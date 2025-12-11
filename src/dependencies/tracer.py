@@ -73,7 +73,7 @@ def create_span(func: Callable):
 
 
 @wrapt.decorator
-def observe(wrapped, instance, args, kwargs):
+def _observe(wrapped, instance, args, kwargs):
     if inspect.iscoroutinefunction(wrapped):
 
         async def _awrapper():
@@ -84,6 +84,12 @@ def observe(wrapped, instance, args, kwargs):
     else:
         with create_span(wrapped):
             return wrapped(*args, **kwargs)
+
+
+def observe(wrapped=None):
+    if wrapped is None:
+        return _observe
+    return _observe(wrapped)
 
 
 __all__ = ["observe", "track"]

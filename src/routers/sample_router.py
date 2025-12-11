@@ -20,7 +20,7 @@ router = APIRouter(
 
 
 @router.post("/")
-@tracer.observe
+@tracer.observe()
 async def create(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
@@ -35,7 +35,7 @@ async def create(
 
 
 @router.get("/")
-@tracer.observe
+@tracer.observe()
 async def read_all(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
@@ -45,7 +45,7 @@ async def read_all(
 
 
 @router.get("/{id}")
-@tracer.observe
+@tracer.observe()
 async def read(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
@@ -60,7 +60,7 @@ async def read(
 
 
 @router.patch("/{id}")
-@tracer.observe
+@tracer.observe()
 async def update(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
@@ -76,7 +76,7 @@ async def update(
 
 
 @router.delete("/{id}")
-@tracer.observe
+@tracer.observe()
 async def delete(
     logger: Logger,
     sample_service: Annotated[SampleService, Depends()],
