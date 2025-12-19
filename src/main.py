@@ -20,8 +20,8 @@ async def lifespan(app: FastAPI):
     from src.dependencies import database, logger, tracer
 
     await database.init()
-    await logger.init()
     await tracer.init()
+    await logger.init()
     yield
 
 
