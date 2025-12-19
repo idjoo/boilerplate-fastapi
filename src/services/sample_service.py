@@ -5,7 +5,6 @@ from fastapi import Depends
 from fastapi_pagination import Page
 
 from src.dependencies import tracer
-
 from src.models import (
     Sample,
     SampleCreate,

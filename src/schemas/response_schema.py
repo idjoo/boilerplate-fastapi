@@ -1,11 +1,11 @@
-from typing import Generic, TypeVar
+from typing import TypeVar
 
 from pydantic import BaseModel
 
 T = TypeVar("T")
 
 
-class Response(BaseModel, Generic[T]):  # noqa: UP046
+class Response[T](BaseModel):
     status: int = 200
     message: str = ""
     data: T | None
