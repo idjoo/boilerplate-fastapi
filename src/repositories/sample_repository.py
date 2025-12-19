@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from fastapi_pagination import Page
-from fastapi_pagination.ext.async_sqlmodel import paginate
+from fastapi_pagination.ext.sqlmodel import paginate
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlmodel import delete, select, update
 
