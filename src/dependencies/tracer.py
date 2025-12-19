@@ -9,7 +9,7 @@ from opentelemetry.propagate import set_global_textmap
 from opentelemetry.propagators.cloud_trace_propagator import (
     CloudTraceFormatPropagator,
 )
-from opentelemetry.sdk.resources import Resource
+from opentelemetry.sdk.resources import Attributes, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.semconv.trace import SpanAttributes
@@ -36,7 +36,10 @@ async def init():
 
 
 @asynccontextmanager
-async def track(name: str) -> Iterator[Span]:
+async def track(
+    name: str,
+    attributes: Attributes | None = None,
+) -> Iterator[Span]:
     config: Config = await aget_config()
     tracer = trace.get_tracer(config.service)
 
@@ -46,8 +49,8 @@ async def track(name: str) -> Iterator[Span]:
         record_exception=True,
         set_status_on_exception=True,
         end_on_exit=True,
+        attributes=attributes,
     ) as span:
-        span.set_attribute("service.name", config.service)
         yield span
         span.set_status(StatusCode.OK)
 
@@ -64,7 +67,6 @@ def create_span(func: Callable):
         set_status_on_exception=True,
         end_on_exit=True,
     ) as span:
-        span.set_attribute("service.name", config.service)
         span.set_attribute(SpanAttributes.CODE_FUNCTION, func.__qualname__)
         span.set_attribute(SpanAttributes.CODE_NAMESPACE, func.__module__)
         span.set_attribute(SpanAttributes.CODE_FILEPATH, inspect.getfile(func))
