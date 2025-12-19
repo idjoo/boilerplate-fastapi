@@ -55,7 +55,7 @@ Defines the structure of data moving in and out of the API using **Pydantic**. T
 We leverage FastAPI's `Depends` system heavily to inject dependencies:
 
 - `Config`: Application settings.
-- `Database`: Database session management.
+- `Database`: Async database session management.
 - `Logger`: Structured logging instance.
 - `HttpClient`: Async HTTP client for external requests.
 

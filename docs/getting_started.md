@@ -4,9 +4,9 @@
 
 Ensure you have the following installed:
 
-- **Python 3.13+**
+- **Python 3.13+** (Required)
 - **Docker** & **Docker Compose** (for containerization and local DB)
-- **uv** (required for dependency management)
+- **uv** (Required for dependency management)
 
 ## Installation
 
@@ -43,6 +43,8 @@ Ensure you have the following installed:
     ```sh
     docker-compose up -d
     ```
+
+    _Note: If this is your first time running, migrations will be applied automatically by the app init, or you can run `uv run alembic upgrade head` manually._
 
 2.  **Run the Application:**
 

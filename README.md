@@ -1,4 +1,4 @@
-# FastAPI Boilerplate
+# FastAPI Production Boilerplate
 
 A scalable, production-ready FastAPI backend boilerplate designed for high performance, maintainability, and developer experience.
 
@@ -10,8 +10,8 @@ A scalable, production-ready FastAPI backend boilerplate designed for high perfo
 - **Production Ready**: Docker, Cloud Build config, and structured logging.
 - **Developer Experience**:
   - **uv** for fast dependency management.
-  - **Ruff** for linting/formatting.
-  - **Pre-commit** hooks.
+  - **ruff** for linting/formatting.
+  - **pre-commit** hooks.
 - **Configuration**: Type-safe settings using `pydantic-settings` (YAML/Env/JSON).
 
 ## 📚 Documentation

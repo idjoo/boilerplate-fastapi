@@ -31,6 +31,6 @@ Configuration files are included for a standard GCP pipeline:
 
 ## Production Checklist
 
-1.  Set `environment: PRD` in config.
+1.  Set `environment: prd` in config.
 2.  Ensure `SECRET` variables (DB passwords) are passed via Environment Variables or Secret Manager, not committed in code.
 3.  Configure your Cloud Trace/Logging permissions for the service account.

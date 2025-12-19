@@ -35,11 +35,27 @@ uv run alembic downgrade -1
 
 Always access the database through Repositories. Do not use the raw session in Routers or Services if possible.
 
-Example Repository Method:
+### Example Repository Methods
+
+**Reading Data:**
 
 ```python
 async def get_user(self, user_id: int) -> User | None:
     statement = select(User).where(User.id == user_id)
     result = await self.session.exec(statement)
     return result.first()
+```
+
+**Creating Data (Standard Way):**
+
+```python
+async def create(self, sample: SampleCreate) -> Sample:
+    data = Sample.model_validate(sample)
+    result = (
+        await self.db.scalars(
+            insert(Sample).values(data.model_dump()).returning(Sample),
+        )
+    ).one()
+    await self.db.commit()
+    return result
 ```
