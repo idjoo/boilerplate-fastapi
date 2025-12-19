@@ -10,12 +10,13 @@ dependencies = [
     "sqlmodel>=0.0.22",
     "pydantic-settings>=2.7.1",
     "google-cloud-logging>=3.11.4",
+    "opentelemetry-api>=1.30.0",
     "opentelemetry-sdk>=1.30.0",
     "opentelemetry-propagator-gcp>=1.9.0",
     "opentelemetry-exporter-gcp-trace>=1.9.0",
-    "opentelemetry-api>=1.30.0",
     "fastapi-pagination>=0.12.34",
     "psycopg[binary]>=3.2.9",
+    "greenlet>=3.1.1",
     "wrapt>=2.0.1",
 ]
 
