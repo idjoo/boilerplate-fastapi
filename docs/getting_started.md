@@ -44,9 +44,16 @@ Ensure you have the following installed:
     docker-compose up -d
     ```
 
-    _Note: If this is your first time running, migrations will be applied automatically by the app init, or you can run `uv run alembic upgrade head` manually._
+2.  **Initialize Database (Important):**
 
-2.  **Run the Application:**
+    Since this is a boilerplate, you need to generate the initial migration for your models:
+
+    ```sh
+    uv run alembic revision --autogenerate -m "chore: init"
+    uv run alembic upgrade head
+    ```
+
+3.  **Run the Application:**
 
     Start the server using `uv`:
 
@@ -56,7 +63,7 @@ Ensure you have the following installed:
 
     The server will start at `http://0.0.0.0:8080`.
 
-3.  **Access Documentation:**
+4.  **Access Documentation:**
     - Swagger UI: [http://localhost:8080/docs](http://localhost:8080/docs)
     - Redoc: [http://localhost:8080/redoc](http://localhost:8080/redoc)
 

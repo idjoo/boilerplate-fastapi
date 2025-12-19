@@ -11,6 +11,15 @@ We use **SQLModel** (which combines Pydantic and SQLAlchemy) for database intera
 
 Database schema changes are managed by **Alembic**.
 
+### Initial Setup
+
+When starting a new project from this boilerplate, you must generate the first migration **after defining your models**:
+
+```sh
+uv run alembic revision --autogenerate -m "chore: init"
+uv run alembic upgrade head
+```
+
 ### Common Commands
 
 **Create a new migration** (after changing models):
