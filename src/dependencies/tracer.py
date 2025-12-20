@@ -26,10 +26,13 @@ async def init():
     tracer_provider = TracerProvider(
         resource=Resource.create({"service.name": config.service}),
     )
+
     trace.set_tracer_provider(tracer_provider)
 
     trace.get_tracer_provider().add_span_processor(
-        BatchSpanProcessor(CloudTraceSpanExporter())
+        BatchSpanProcessor(
+            CloudTraceSpanExporter(resource_regex=r".*"),
+        )
     )
 
     set_global_textmap(CloudTraceFormatPropagator())

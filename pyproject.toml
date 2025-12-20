@@ -14,12 +14,12 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "aiofiles>=24.1",
   "fastapi[all]>=0.115.8",
   "fastapi-pagination>=0.12.34",
   "google-cloud-logging>=3.11.4",
   "greenlet>=3.1.1",
   "opentelemetry-api>=1.30",
+  "opentelemetry-exporter-gcp-logging>=1.9.0a0",
   "opentelemetry-exporter-gcp-trace>=1.9",
   "opentelemetry-propagator-gcp>=1.9",
   "opentelemetry-sdk>=1.30",

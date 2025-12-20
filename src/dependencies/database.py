@@ -45,8 +45,6 @@ async def init():
 async def aget_session(
     engine: Annotated[AsyncEngine, Depends(create_engine)],
 ) -> AsyncSession:
-    logger.info("creating database session")
-
     session = sessionmaker(
         bind=engine, class_=AsyncSession, expire_on_commit=False
     )
@@ -54,8 +52,6 @@ async def aget_session(
     async with session() as session:
         yield session
         await session.close()
-
-    logger.info("closing database session")
 
 
 Database = Annotated[AsyncSession, Depends(aget_session)]

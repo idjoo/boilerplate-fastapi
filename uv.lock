@@ -3,15 +3,6 @@ revision = 1
 requires-python = ">=3.13"
 
 [[package]]
-name = "aiofiles"
-version = "24.1.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0b/03/a88171e277e8caa88a4c77808c20ebb04ba74cc4681bf1e9416c862de237/aiofiles-24.1.0.tar.gz", hash = "sha256:22a075c9e5a3810f0c2e48f3008c94d68c65d763b9b03857924c99e57355166c", size = 30247 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a5/45/30bb92d442636f570cb5651bc661f52b610e2eec3f891a5dc3a4c3667db0/aiofiles-24.1.0-py3-none-any.whl", hash = "sha256:b4ec55f4195e3eb5d7abd1bf7e061763e864dd4954231fb8539a0ef8bb8260e5", size = 15896 },
-]
-
-[[package]]
 name = "alembic"
 version = "1.16.4"
 source = { registry = "https://pypi.org/simple" }
@@ -654,6 +645,20 @@ wheels = [
 ]
 
 [[package]]
+name = "opentelemetry-exporter-gcp-logging"
+version = "1.9.0a0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "google-cloud-logging" },
+    { name = "opentelemetry-resourcedetector-gcp" },
+    { name = "opentelemetry-sdk" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/30/0a/c379400c35196df247acd5ab9f0b0313c86c2b39b75c7f57667d5b9272d1/opentelemetry_exporter_gcp_logging-1.9.0a0.tar.gz", hash = "sha256:33db5fa2f642174bc371be12942276cea9abf4d1db0f7421aac58532a4d14445", size = 15292 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/91/04/218292d10e00b701ef2ab5a3d20b7bd9401cdcba0ee52022e83e06e92622/opentelemetry_exporter_gcp_logging-1.9.0a0-py3-none-any.whl", hash = "sha256:5455b899adc11e5b82b2ffe82552969f2228c4a66e51258967b39b37d4b6e1e6", size = 11666 },
+]
+
+[[package]]
 name = "opentelemetry-exporter-gcp-trace"
 version = "1.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1101,12 +1106,12 @@ name = "service"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
-    { name = "aiofiles" },
     { name = "fastapi", extra = ["all"] },
     { name = "fastapi-pagination" },
     { name = "google-cloud-logging" },
     { name = "greenlet" },
     { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-gcp-logging" },
     { name = "opentelemetry-exporter-gcp-trace" },
     { name = "opentelemetry-propagator-gcp" },
     { name = "opentelemetry-sdk" },
@@ -1128,15 +1133,15 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiofiles", specifier = ">=24.1.0" },
     { name = "fastapi", extras = ["all"], specifier = ">=0.115.8" },
     { name = "fastapi-pagination", specifier = ">=0.12.34" },
     { name = "google-cloud-logging", specifier = ">=3.11.4" },
     { name = "greenlet", specifier = ">=3.1.1" },
-    { name = "opentelemetry-api", specifier = ">=1.30.0" },
-    { name = "opentelemetry-exporter-gcp-trace", specifier = ">=1.9.0" },
-    { name = "opentelemetry-propagator-gcp", specifier = ">=1.9.0" },
-    { name = "opentelemetry-sdk", specifier = ">=1.30.0" },
+    { name = "opentelemetry-api", specifier = ">=1.30" },
+    { name = "opentelemetry-exporter-gcp-logging", specifier = ">=1.9.0a0" },
+    { name = "opentelemetry-exporter-gcp-trace", specifier = ">=1.9" },
+    { name = "opentelemetry-propagator-gcp", specifier = ">=1.9" },
+    { name = "opentelemetry-sdk", specifier = ">=1.30" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.9" },
     { name = "pydantic-settings", specifier = ">=2.7.1" },
     { name = "sqlmodel", specifier = ">=0.0.22" },
@@ -1147,9 +1152,9 @@ requires-dist = [
 dev = [
     { name = "alembic", specifier = ">=1.16.4" },
     { name = "coverage", specifier = ">=7.6.10" },
-    { name = "pre-commit", specifier = ">=4.1.0" },
+    { name = "pre-commit", specifier = ">=4.1" },
     { name = "pytest-asyncio", specifier = ">=0.25.3" },
-    { name = "pytest-cov", specifier = ">=6.0.0" },
+    { name = "pytest-cov", specifier = ">=6" },
     { name = "ruff", specifier = ">=0.9.4" },
 ]
 
