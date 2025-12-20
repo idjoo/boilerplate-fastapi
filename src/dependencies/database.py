@@ -15,20 +15,33 @@ from src.dependencies.logger import Logger, get_logger
 config: Config = get_config()
 logger: Logger = get_logger()
 
+_engine: AsyncEngine | None = None
 
-async def create_engine() -> AsyncEngine:
-    url = config.database.url
-    if not url:
-        url = (
-            f"{config.database.kind}+{config.database.adapter}://"
-            f"{config.database.username}:{quote(config.database.password)}@"
-            f"{config.database.host}:{config.database.port}/"
-            f"{config.database.name}"
+
+def get_engine() -> AsyncEngine:
+    global _engine
+
+    if _engine is None:
+        url = config.database.url
+        if not url:
+            url = (
+                f"{config.database.kind}+{config.database.adapter}://"
+                f"{config.database.username}:{quote(config.database.password)}@"
+                f"{config.database.host}:{config.database.port}/"
+                f"{config.database.name}"
+            )
+
+        logger.info(f"creating database engine: {url}")
+
+        _engine = create_async_engine(
+            url=url,
+            echo=config.logging.level == "debug",
+            future=True,
+            pool_size=20,
+            max_overflow=10,
         )
 
-    logger.info(f"creating database engine: {url}")
-
-    return create_async_engine(url=url, echo=True, future=True)
+    return _engine
 
 
 async def init():
@@ -42,16 +55,14 @@ async def init():
     )
 
 
-async def aget_session(
-    engine: Annotated[AsyncEngine, Depends(create_engine)],
-) -> AsyncSession:
+async def aget_session() -> AsyncSession:
+    engine = get_engine()
     session = sessionmaker(
         bind=engine, class_=AsyncSession, expire_on_commit=False
     )
 
     async with session() as session:
         yield session
-        await session.close()
 
 
 Database = Annotated[AsyncSession, Depends(aget_session)]

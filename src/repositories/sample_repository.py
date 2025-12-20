@@ -94,7 +94,6 @@ class SampleRepository:
                     select(Sample).where(Sample.id == id),
                 )
             ).one()
-            await self.db.refresh(result)
             return result
         except NoResultFound as error:
             self.logger.warning(
@@ -130,7 +129,6 @@ class SampleRepository:
                 )
             ).one()
             await self.db.commit()
-            await self.db.refresh(result)
             self.logger.debug(
                 {
                     "message": "Sample updated in DB",
