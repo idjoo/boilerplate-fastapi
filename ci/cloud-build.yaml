@@ -20,7 +20,9 @@ steps:
       - run
       - --filename=ci/skaffold.yaml
 
+serviceAccount: projects/${PROJECT_ID}/serviceAccounts/builder@${PROJECT_ID}.iam.gserviceaccount.com
+logsBucket: ${PROJECT_ID}_cloudbuild
+
 options:
   dynamicSubstitutions: true
   automapSubstitutions: true
-

@@ -3,6 +3,7 @@ kind: Config
 build:
   googleCloudBuild:
     projectId: "{{PROJECT_ID}}"
+    serviceAccount: "projects/{{PROJECT_ID}}/serviceAccounts/builder@{{PROJECT_ID}}.iam.gserviceaccount.com"
   artifacts:
     - image: "{{_IMAGE}}"
       kaniko:
