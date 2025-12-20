@@ -3,9 +3,9 @@ from uuid import UUID
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlmodel import paginate
 from sqlalchemy.exc import IntegrityError, NoResultFound
-from sqlmodel import delete, select, update
+from sqlmodel import delete, insert, select, update
 
-from src.dependencies import Database, tracer
+from src.dependencies import Database, Logger, tracer
 from src.exceptions import (
     BaseError,
     SampleAlreadyExistsError,
@@ -20,9 +20,11 @@ from src.models import (
 
 class SampleRepository:
     db: Database
+    logger: Logger
 
-    def __init__(self, db: Database) -> None:
+    def __init__(self, db: Database, logger: Logger) -> None:
         self.db = db
+        self.logger = logger
 
     @tracer.observe()
     async def create(
@@ -30,15 +32,36 @@ class SampleRepository:
         sample: SampleCreate,
     ) -> Sample:
         try:
-            data = Sample()
-            data = data.model_validate(sample)
-            self.db.add(data)
+            data = Sample.model_validate(sample)
+            result = (
+                await self.db.scalars(
+                    insert(Sample).values(data.model_dump()).returning(Sample),
+                )
+            ).one()
             await self.db.commit()
-            await self.db.refresh(data)
-            return data
+            self.logger.debug(
+                {
+                    "message": "Sample created in DB",
+                    "sample": result.model_dump(mode="json"),
+                }
+            )
+            return result
         except IntegrityError as error:
+            self.logger.warning(
+                {
+                    "message": "Sample creation failed: already exists",
+                    "error": str(error),
+                }
+            )
             raise SampleAlreadyExistsError() from error
         except Exception as error:
+            self.logger.error(
+                {
+                    "message": "Database error during creation",
+                    "error": str(error),
+                },
+                exc_info=True,
+            )
             raise BaseError("Database Internal Error") from error
 
     @tracer.observe()
@@ -51,6 +74,13 @@ class SampleRepository:
                 select(Sample),
             )
         except Exception as error:
+            self.logger.error(
+                {
+                    "message": "Database error during read_all",
+                    "error": str(error),
+                },
+                exc_info=True,
+            )
             raise BaseError("Database Internal Error") from error
 
     @tracer.observe()
@@ -67,8 +97,21 @@ class SampleRepository:
             await self.db.refresh(result)
             return result
         except NoResultFound as error:
+            self.logger.warning(
+                {
+                    "message": "Sample not found",
+                    "sample_id": str(id),
+                }
+            )
             raise SampleNotFoundError() from error
         except Exception as error:
+            self.logger.error(
+                {
+                    "message": "Database error during read",
+                    "error": str(error),
+                },
+                exc_info=True,
+            )
             raise BaseError("Database Internal Error") from error
 
     @tracer.observe()
@@ -82,14 +125,27 @@ class SampleRepository:
                 await self.db.scalars(
                     update(Sample)
                     .where(Sample.id == id)
-                    .values(sample.model_dump(exclude_none=True))
+                    .values(sample.model_dump(mode="json", exclude_none=True))
                     .returning(Sample),
                 )
             ).one()
             await self.db.commit()
             await self.db.refresh(result)
+            self.logger.debug(
+                {
+                    "message": "Sample updated in DB",
+                    "sample": result.model_dump(mode="json"),
+                }
+            )
             return result
         except Exception as error:
+            self.logger.error(
+                {
+                    "message": "Database error during update",
+                    "error": str(error),
+                },
+                exc_info=True,
+            )
             raise BaseError("Database Internal Error") from error
 
     @tracer.observe()
@@ -100,5 +156,18 @@ class SampleRepository:
         try:
             await self.db.exec(delete(Sample).where(Sample.id == id))
             await self.db.commit()
+            self.logger.debug(
+                {
+                    "message": "Sample deleted from DB",
+                    "sample_id": str(id),
+                }
+            )
         except Exception as error:
+            self.logger.error(
+                {
+                    "message": "Database error during delete",
+                    "error": str(error),
+                },
+                exc_info=True,
+            )
             raise BaseError("Database Internal Error") from error
