@@ -42,7 +42,13 @@ Detailed documentation is available in the `docs/` directory:
     docker-compose up -d
     ```
 
-3.  **Start Server**
+3.  **Generate Initial Migration**
+
+    ```sh
+    uv run alembic revision --autogenerate -m "chore: init"
+    ```
+
+4.  **Start Server**
     ```sh
     uv run app
     ```
