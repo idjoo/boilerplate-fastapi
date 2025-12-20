@@ -17,12 +17,15 @@ from src.routers import HealthRouter, SampleRouter
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from src.dependencies import database, logger, tracer
+    from src.dependencies import database, http_client, logger, tracer
 
     await database.init()
     await tracer.init()
     await logger.init()
+    await http_client.init()
     yield
+    await http_client.close()
+    await database.close()
 
 
 config: Config = get_config()

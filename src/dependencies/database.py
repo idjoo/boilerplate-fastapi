@@ -55,6 +55,13 @@ async def init():
     )
 
 
+async def close():
+    global _engine
+    if _engine:
+        await _engine.dispose()
+        _engine = None
+
+
 async def aget_session() -> AsyncSession:
     engine = get_engine()
     session = sessionmaker(
