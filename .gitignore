@@ -181,5 +181,6 @@ config.yml
 config.*.yml
 config.yaml
 config.*.yaml
+!config.example.yaml
 config.toml
 config.*.toml

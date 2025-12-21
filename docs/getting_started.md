@@ -24,7 +24,13 @@ Ensure you have the following installed:
     - Environment variables
     - `.env` file
 
-    Copy the example config (if available) or modify `config.yaml` directly to set your service name and database credentials.
+    Copy the example configuration:
+
+    ```sh
+    cp config.example.yaml config.yaml
+    ```
+
+    Modify `config.yaml` in the project root to set your service name and database credentials if needed.
 
 3.  **Install Dependencies:**
 
@@ -38,7 +44,7 @@ Ensure you have the following installed:
 
 1.  **Start Infrastructure (Database):**
 
-    Use Docker Compose to spin up the local PostgreSQL database.
+    Use Docker Compose to spin up the local PostgreSQL database (defined in `docker-compose.yml`):
 
     ```sh
     docker-compose up -d
@@ -46,10 +52,13 @@ Ensure you have the following installed:
 
 2.  **Initialize Database (Important):**
 
-    Since this is a boilerplate, you need to generate the initial migration for your models:
+    Since this is a boilerplate, you need to generate the initial migration to create the tables for your models:
 
     ```sh
+    # Generate the first migration file based on the models
     uv run alembic revision --autogenerate -m "chore: init"
+
+    # Apply the migration to the database
     uv run alembic upgrade head
     ```
 

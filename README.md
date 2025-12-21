@@ -36,19 +36,25 @@ Detailed documentation is available in the `docs/` directory:
     uv sync
     ```
 
-2.  **Run Database**
+2.  **Configure**
+
+    ```sh
+    cp config.example.yaml config.yaml
+    ```
+
+3.  **Run Database**
 
     ```sh
     docker-compose up -d
     ```
 
-3.  **Generate Initial Migration**
+4.  **Generate Initial Migration**
 
     ```sh
     uv run alembic revision --autogenerate -m "chore: init"
     ```
 
-4.  **Start Server**
+5.  **Start Server**
     ```sh
     uv run app
     ```

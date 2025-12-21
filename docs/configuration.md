@@ -8,14 +8,20 @@ Configuration is loaded in the following order of precedence (highest to lowest)
 
 1.  Environment Variables
 2.  `.env` file
-3.  `config.yaml`
+3.  `config.yaml` (copied from `config.example.yaml`)
 4.  `config.json`
 5.  `config.toml`
 6.  Default values in code
 
 ## `config.yaml`
 
-The primary configuration file. Example structure:
+The primary configuration file. Start by copying the example:
+
+```bash
+cp config.example.yaml config.yaml
+```
+
+Example structure:
 
 ```yaml
 service: "my-service"
