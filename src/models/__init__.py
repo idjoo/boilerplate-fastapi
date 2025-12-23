@@ -1,13 +1,12 @@
 from .sample_model import (
-    Sample,
-    SampleCreate,
-    SamplePublic,
-    SampleUpdate,
+    Sample as Sample,
 )
-
-__all__ = [
-    "Sample",
-    "SampleCreate",
-    "SamplePublic",
-    "SampleUpdate",
-]
+from .sample_model import (
+    SampleCreate as SampleCreate,
+)
+from .sample_model import (
+    SamplePublic as SamplePublic,
+)
+from .sample_model import (
+    SampleUpdate as SampleUpdate,
+)
