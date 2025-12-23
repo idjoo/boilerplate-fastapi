@@ -27,7 +27,7 @@ async def root(logger: Logger):
 We provide a custom `@observe` decorator (`src.dependencies.tracer.observe`) to automatically trace functions.
 
 ```python
-from src.dependencies.tracer import observe
+from src.dependencies import observe, track
 
 @observe
 async def complex_calculation(data):
@@ -40,7 +40,7 @@ async def complex_calculation(data):
 For finer control, you can use the `track` context manager:
 
 ```python
-from src.dependencies.tracer import track
+
 
 async def process():
     async with track("processing_step"):
