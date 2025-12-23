@@ -2,7 +2,6 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import Depends
-from fastapi_pagination import Page
 
 from src.dependencies import Logger, tracer
 from src.models import (
@@ -11,6 +10,7 @@ from src.models import (
     SampleUpdate,
 )
 from src.repositories import SampleRepository
+from src.schemas import Page
 
 
 class SampleService:

@@ -2,7 +2,6 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
-from fastapi_pagination import Page
 
 from src.dependencies import Logger, tracer
 from src.models import (
@@ -10,7 +9,7 @@ from src.models import (
     SamplePublic,
     SampleUpdate,
 )
-from src.schemas import Response
+from src.schemas import Page, Response
 from src.services import SampleService
 
 SampleRouter = APIRouter(

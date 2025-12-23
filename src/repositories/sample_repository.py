@@ -1,6 +1,5 @@
 from uuid import UUID
 
-from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlmodel import paginate
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from sqlmodel import delete, insert, select, update
@@ -16,6 +15,7 @@ from src.models import (
     SampleCreate,
     SampleUpdate,
 )
+from src.schemas import Page
 
 
 class SampleRepository:
