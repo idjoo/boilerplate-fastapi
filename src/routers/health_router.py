@@ -5,12 +5,12 @@ from fastapi import APIRouter, Depends, status
 from src.schemas import HealthCheck
 from src.services import HealthService
 
-router = APIRouter(
+HealthRouter = APIRouter(
     tags=["health"],
 )
 
 
-@router.get(
+@HealthRouter.get(
     "/health",
     summary="Perform a Health Check",
     response_description="Return HTTP Status Code 200 (OK)",

@@ -13,13 +13,13 @@ from src.models import (
 from src.schemas import Response
 from src.services import SampleService
 
-router = APIRouter(
+SampleRouter = APIRouter(
     prefix="/samples",
     tags=["sample"],
 )
 
 
-@router.post("/")
+@SampleRouter.post("/")
 @tracer.observe()
 async def create(
     logger: Logger,
@@ -46,7 +46,7 @@ async def create(
     )
 
 
-@router.get("/")
+@SampleRouter.get("/")
 @tracer.observe()
 async def read_all(
     logger: Logger,
@@ -57,7 +57,7 @@ async def read_all(
     return data
 
 
-@router.get("/{id}")
+@SampleRouter.get("/{id}")
 @tracer.observe()
 async def read(
     logger: Logger,
@@ -78,7 +78,7 @@ async def read(
     )
 
 
-@router.patch("/{id}")
+@SampleRouter.patch("/{id}")
 @tracer.observe()
 async def update(
     logger: Logger,
@@ -107,7 +107,7 @@ async def update(
     )
 
 
-@router.delete("/{id}")
+@SampleRouter.delete("/{id}")
 @tracer.observe()
 async def delete(
     logger: Logger,
