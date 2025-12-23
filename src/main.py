@@ -8,9 +8,13 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi_pagination import add_pagination
 
-from src.dependencies import Environment
-from src.dependencies.config import Config, get_config
-from src.dependencies.logger import Logger, get_logger
+from src.dependencies import (
+    Config,
+    Environment,
+    Logger,
+    get_config,
+    get_logger,
+)
 from src.exceptions import BaseError
 from src.routers import HealthRouter, SampleRouter
 

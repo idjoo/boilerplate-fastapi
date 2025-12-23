@@ -7,7 +7,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from sqlmodel import SQLModel
 
-from src.dependencies.config import Config, get_config
+from src.dependencies import Config, get_config
 
 config = context.config
 app_config: Config = get_config()

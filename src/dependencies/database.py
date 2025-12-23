@@ -9,8 +9,8 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from src.dependencies.config import Config, get_config
-from src.dependencies.logger import Logger, get_logger
+from .config import Config, get_config
+from .logger import Logger, get_logger
 
 config: Config = get_config()
 logger: Logger = get_logger()

@@ -12,7 +12,7 @@ from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.sdk.resources import Resource
 
-from src.dependencies.config import Config, get_config
+from .config import Config, get_config
 
 config: Config = get_config()
 
