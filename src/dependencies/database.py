@@ -1,3 +1,4 @@
+import re
 from typing import Annotated
 from urllib.parse import quote
 
@@ -31,7 +32,8 @@ def get_engine() -> AsyncEngine:
                 f"{config.database.name}"
             )
 
-        logger.info(f"creating database engine: {url}")
+        masked_url = re.sub(r"://[^:]+:[^@]+@", "://***:***@", url)
+        logger.info(f"creating database engine: {masked_url}")
 
         _engine = create_async_engine(
             url=url,

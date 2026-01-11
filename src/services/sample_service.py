@@ -33,25 +33,15 @@ class SampleService:
         async with tracer.track(
             "logic:create_sample", attributes={"sample.name": sample.name}
         ) as span:
-            try:
-                self.logger.info(
-                    {
-                        "message": "Starting sample creation logic",
-                        "sample": sample.model_dump(mode="json"),
-                    }
-                )
-                result = await self.sample_repository.create(sample)
-                span.set_attribute("sample.id", str(result.id))
-                return result
-            except Exception as e:
-                self.logger.error(
-                    {
-                        "message": "Failed to create sample in logic layer",
-                        "error": str(e),
-                    }
-                )
-                span.record_exception(e)
-                raise
+            self.logger.debug(
+                {
+                    "message": "Creating sample",
+                    "sample": sample.model_dump(mode="json"),
+                }
+            )
+            result = await self.sample_repository.create(sample)
+            span.set_attribute("sample.id", str(result.id))
+            return result
 
     @tracer.observe()
     async def read_all(
@@ -69,7 +59,7 @@ class SampleService:
     async def read(
         self,
         id: UUID,
-    ) -> Sample | None:
+    ) -> Sample:
         self.logger.debug(
             {
                 "message": "Calling repository to read sample",

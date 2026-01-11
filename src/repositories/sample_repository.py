@@ -87,7 +87,7 @@ class SampleRepository:
     async def read(
         self,
         id: UUID,
-    ) -> Sample | None:
+    ) -> Sample:
         try:
             result = (
                 await self.db.exec(
@@ -136,6 +136,14 @@ class SampleRepository:
                 }
             )
             return result
+        except NoResultFound as error:
+            self.logger.warning(
+                {
+                    "message": "Sample not found for update",
+                    "sample_id": str(id),
+                }
+            )
+            raise SampleNotFoundError() from error
         except Exception as error:
             self.logger.error(
                 {
@@ -152,7 +160,15 @@ class SampleRepository:
         id: UUID,
     ) -> None:
         try:
-            await self.db.exec(delete(Sample).where(Sample.id == id))
+            result = await self.db.exec(delete(Sample).where(Sample.id == id))
+            if result.rowcount == 0:
+                self.logger.warning(
+                    {
+                        "message": "Sample not found for deletion",
+                        "sample_id": str(id),
+                    }
+                )
+                raise SampleNotFoundError()
             await self.db.commit()
             self.logger.debug(
                 {
@@ -160,6 +176,8 @@ class SampleRepository:
                     "sample_id": str(id),
                 }
             )
+        except SampleNotFoundError:
+            raise
         except Exception as error:
             self.logger.error(
                 {
