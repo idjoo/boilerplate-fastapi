@@ -56,10 +56,10 @@ Ensure you have the following installed:
 
     ```sh
     # Generate the first migration file based on the models
-    uv run alembic revision --autogenerate -m "chore: init"
+    uv run alembic -c db/alembic.ini revision --autogenerate -m "chore: init"
 
     # Apply the migration to the database
-    uv run alembic upgrade head
+    uv run alembic -c db/alembic.ini upgrade head
     ```
 
 3.  **Run the Application:**

@@ -51,7 +51,7 @@ Detailed documentation is available in the `docs/` directory:
 4.  **Generate Initial Migration**
 
     ```sh
-    uv run alembic revision --autogenerate -m "chore: init"
+    uv run alembic -c db/alembic.ini revision --autogenerate -m "chore: init"
     ```
 
 5.  **Start Server**

@@ -16,8 +16,8 @@ Database schema changes are managed by **Alembic**.
 When starting a new project from this boilerplate, you must generate the first migration **after defining your models**:
 
 ```sh
-uv run alembic revision --autogenerate -m "chore: init"
-uv run alembic upgrade head
+uv run alembic -c db/alembic.ini revision --autogenerate -m "chore: init"
+uv run alembic -c db/alembic.ini upgrade head
 ```
 
 ### Common Commands
@@ -25,19 +25,19 @@ uv run alembic upgrade head
 **Create a new migration** (after changing models):
 
 ```sh
-uv run alembic revision --autogenerate -m "description_of_changes"
+uv run alembic -c db/alembic.ini revision --autogenerate -m "description_of_changes"
 ```
 
 **Apply migrations**:
 
 ```sh
-uv run alembic upgrade head
+uv run alembic -c db/alembic.ini upgrade head
 ```
 
 **Revert last migration**:
 
 ```sh
-uv run alembic downgrade -1
+uv run alembic -c db/alembic.ini downgrade -1
 ```
 
 ## Repositories
